@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Fingerprint SDK Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        pre {
+            background: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .loading {
+            display: none;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Device Fingerprint SDK Demo</h1>
+    <div class="container">
+        <h2>Generate Device Fingerprint</h2>
+        <button id="generateBtn">Generate Fingerprint</button>
+        <div id="loading" class="loading">Generating fingerprint...</div>
+        <pre id="result"></pre>
+    </div>
+
+    <script src="./deviceFingerprint.js"></script>
+    <script>
+        const generateBtn = document.getElementById('generateBtn');
+        const loading = document.getElementById('loading');
+        const result = document.getElementById('result');
+
+        generateBtn.addEventListener('click', async () => {
+            try {
+                generateBtn.disabled = true;
+                loading.style.display = 'block';
+                result.textContent = '';
+
+                const fingerprint = await DeviceFingerprint.default.generate();
+                console.log('fingerprint ', fingerprint)
+                const components = DeviceFingerprint.default.getComponents();
+
+                result.textContent = JSON.stringify({
+                    fingerprint,
+                    components
+                }, null, 2);
+            } catch (error) {
+                result.textContent = `Error: ${error.message}`;
+            } finally {
+                generateBtn.disabled = false;
+                loading.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html> 

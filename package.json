@@ -1,0 +1,39 @@
+{
+  "name": "device-fingerprint-sdk",
+  "version": "1.0.0",
+  "description": "A comprehensive device fingerprint SDK for browser environment",
+  "main": "dist/deviceFingerprint.js",
+  "types": "dist/deviceFingerprint.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "tsc -w",
+    "dev": "rollup -c -w & serve dist & npx open-cli http://localhost:3000/",
+    "clean": "rimraf dist",
+    "lint": "eslint src --ext .ts",
+    "test": "jest"
+  },
+  "keywords": [
+    "device-fingerprint",
+    "browser-fingerprint",
+    "device-identification"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "@types/jest": "^29.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/parser": "^5.59.0",
+    "eslint": "^8.38.0",
+    "jest": "^29.5.0",
+    "open-cli": "^8.0.0",
+    "rimraf": "^5.0.0",
+    "rollup": "^3.0.0",
+    "rollup-plugin-typescript2": "^0.35.0",
+    "serve": "^14.2.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.0"
+  }
+}
