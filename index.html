@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>设备指纹演示</title>
+    <script src="deviceFingerprint.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .result {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f5f5f5;
+        border-radius: 5px;
+        word-break: break-all;
+      }
+      button {
+        padding: 10px 15px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      .details {
+        margin-top: 20px;
+        display: none;
+      }
+      .detail-item {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>设备指纹演示</h1>
+    <p>点击下方按钮生成您的设备指纹：</p>
+
+    <button id="generateBtn">生成设备指纹</button>
+    <button id="showDetailsBtn" style="margin-left: 10px">显示详细信息</button>
+
+    <div id="result" class="result"></div>
+
+    <div id="details" class="details">
+      <h3>指纹详细信息：</h3>
+      <div id="detailContent"></div>
+    </div>
+
+    <script>
+      let fingerprintDetails = {};
+
+      document
+        .getElementById("generateBtn")
+        .addEventListener("click", async () => {
+          const resultDiv = document.getElementById("result");
+          resultDiv.innerHTML = "正在生成设备指纹...";
+
+          try {
+            const fingerprint = await deviceFingerprint.generate();
+            fingerprintDetails = deviceFingerprint.getComponents();
+
+            resultDiv.innerHTML = `
+          <h3>您的设备指纹:</h3>
+          <p><strong>${fingerprint}</strong></p>
+          <p>刷新页面后指纹将保持不变。</p>
+        `;
+          } catch (error) {
+            resultDiv.innerHTML = `生成指纹时出错: ${error.message}`;
+          }
+        });
+
+      document
+        .getElementById("showDetailsBtn")
+        .addEventListener("click", () => {
+          const detailsDiv = document.getElementById("details");
+          const detailContent = document.getElementById("detailContent");
+
+          if (detailsDiv.style.display === "none") {
+            let detailsHTML = "";
+            for (const [key, value] of Object.entries(fingerprintDetails)) {
+              detailsHTML += `
+            <div class="detail-item">
+              <strong>${key}:</strong> ${
+                typeof value === "object" ? JSON.stringify(value) : value
+              }
+            </div>
+          `;
+            }
+            detailContent.innerHTML = detailsHTML;
+            detailsDiv.style.display = "block";
+            document.getElementById("showDetailsBtn").textContent =
+              "隐藏详细信息";
+          } else {
+            detailsDiv.style.display = "none";
+            document.getElementById("showDetailsBtn").textContent =
+              "显示详细信息";
+          }
+        });
+    </script>
+  </body>
+</html>
